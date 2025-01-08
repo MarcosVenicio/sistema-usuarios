@@ -2,7 +2,7 @@
 
 Este é um sistema de gerenciamento de usuários desenvolvido em PHP com MySQL. O projeto permite cadastrar, editar, excluir e listar usuários.
 
-# Caso você não queira instalar o projeto localmente fiz a instalação dele em um servidor gratuito e você pode visualizar por esse link:
+## Caso você não queira instalar o projeto localmente fiz a instalação dele em um servidor gratuito e você pode visualizar por esse link:
 
 https://marcosvenicio.kesug.com/
 
