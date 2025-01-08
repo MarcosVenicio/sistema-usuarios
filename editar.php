@@ -12,7 +12,15 @@ $usuario = $result->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
+    $senha = $_POST['senha'];
+
+    // Validação de senha com mais de 6 caracteres
+    if (strlen($senha) <= 6) {
+        echo json_encode(array('error' => 'A senha deve ter mais de 6 caracteres.'));
+        exit;
+    }
+
+    $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
 
     // Verifica se o e-mail já existe e não pertence a este usuário
     $checkEmailQuery = "SELECT email FROM usuarios WHERE email = ? AND id != ?";
@@ -27,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $query = "UPDATE usuarios SET nome=?, email=?, senha=? WHERE id=?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param('sssi', $nome, $email, $senha, $id);
+        $stmt->bind_param('sssi', $nome, $email, $senhaHash, $id);
         if ($stmt->execute()) {
             echo json_encode(array('success' => 'Usuário atualizado com sucesso.'));
         } else {
@@ -64,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div>
                         <label>Senha:</label>
-                        <input type="password" name="senha" required minlength="6">
+                        <input type="password" name="senha" required minlength="7">
                     </div>
                     <button type="submit">Atualizar</button>
                 </form>

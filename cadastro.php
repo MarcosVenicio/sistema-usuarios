@@ -4,7 +4,15 @@ include 'conexao.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
+    $senha = $_POST['senha'];
+
+    // Validação de senha com mais de 6 caracteres
+    if (strlen($senha) <= 6) {
+        echo json_encode(array('error' => 'A senha deve ter mais de 6 caracteres.'));
+        exit;
+    }
+
+    $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
 
     // Verifica se o e-mail já existe
     $checkEmailQuery = "SELECT email FROM usuarios WHERE email = ?";
@@ -19,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $query = "INSERT INTO usuarios (nome, email, senha) VALUES (?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param('sss', $nome, $email, $senha);
+        $stmt->bind_param('sss', $nome, $email, $senhaHash);
         if ($stmt->execute()) {
             echo json_encode(array('success' => 'Usuário cadastrado com sucesso.'));
         } else {
@@ -55,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div>
                     <label>Senha:</label>
-                    <input type="password" name="senha" required minlength="6">
+                    <input type="password" name="senha" required minlength="7">
                 </div>
                 <button type="submit">Cadastrar</button>
             </form>
