@@ -28,7 +28,7 @@ cd sistema-usuarios
 
 CREATE DATABASE sistema_usuarios;
 
-## Atualize o arquivo conexao.php com as credenciais do banco de dados:
+### Atualize o arquivo conexao.php com as credenciais do banco de dados
 
 ## Inicie o servidor PHP embutido:
 
